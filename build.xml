@@ -1,0 +1,82 @@
+<project name="hw1" basedir="." default="main" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+
+    <property name="src.dir"     value="src"/>
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="api.dir"     value="api"/>
+    <property name="lib.dir"     value="lib"/>
+    <property name="test.dir"    value="test"/>
+    <property name="config.dir"  value="config"/>
+    <property name="doc.dir"     value="doc/${ant.project.name}"/>
+
+    <path id="master-classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="junit-classpath">
+        <pathelement location="${classes.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="checkstyle"
+            description="Inspects source code for Javadocs errors">
+
+        <taskdef resource="checkstyletask.properties">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar" />
+            </classpath>
+        </taskdef>
+
+        <checkstyle config="${config.dir}/sun_checks.xml"
+                    failOnViolation="false">
+            <fileset dir="src">
+                <include name="**/*.java" />
+            </fileset>
+        </checkstyle>
+
+        <echo>Checkstyle done without error</echo>
+
+    </target>
+
+    <target name="clean" description="Delete build, test, and api directories">
+        <delete dir="${build.dir}"/>
+        <delete dir="${api.dir}"/>
+    </target>
+
+    <target name="compile" description="Create a classes directory and compile the java into it.">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+            <classpath refid="master-classpath"/>
+        </javac>
+    </target>
+
+    <target name="jar" description="Generate jar file.">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <fileset dir="${src.dir}" includes="cscie55/hw1/*.java"/>
+            <fileset dir="." includes="api/*"/>
+            <fileset dir="." includes="documentation/*"/>
+            <manifest>
+                <attribute name="Main-Class" value="cscie55.hw1.elevatortest.ElevatorTest"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="doc" depends="compile" description="Generate javadoc.">
+        <javadoc sourcepath="${src.dir}" destdir="${api.dir}">
+            <classpath refid="master-classpath"/>
+        </javadoc>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+    <target name="main" depends="checkstyle,clean,compile,doc,jar,run"/>
+
+</project>

@@ -1,0 +1,32 @@
+Solution:
+
+The solution includes a single class - Elevator - which uses arrays to track the number
+of passengers in an elevator and whether a stop is required at each floor along with
+the number of passengers who will get off at a particular floor.
+The elevator moves up or down floor by floor and changes direction if it reaches either
+the top or bottom floors.
+
+Assumptions:
+
+1. Elevator is only stopped to let passengers off, none are taken on.
+2. Elevator stops sequentially at each floor even if no stop is required
+by a passenger on that floor.
+
+
+Classes:
+
+Elevator 	 : The base elevator class that tracks passengers.
+ElevatorTest : A class Test which creates an Elevator object, boards two passengers
+               for the 3nd floor, and one for the 5th floor. Then moves the Elevator from the ground
+               floor to the top floor, and then back to the ground floor.
+
+Files included:
+
+Overview.txt: README describing the solution.
+Output.txt:   A sample output of the program.
+build.xml:    Apache Ant Build File.
+
+Folders included:
+api:            Generated javadocs
+documentation:  output, copy of ant build and this overview file
+src:            all the source code
